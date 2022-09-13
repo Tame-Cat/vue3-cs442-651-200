@@ -46,6 +46,9 @@ export default {
                 name: 'rewards.show',
                 params: {id: reward.id}
             })
+        },
+        deleteReward(reward){
+            
         }
     },
     async mounted() {
