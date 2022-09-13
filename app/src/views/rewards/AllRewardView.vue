@@ -5,23 +5,14 @@
         <div v-if="error != null">
             {{ error }}
         </div>
-        
-        <div v-for="reward in rewards"
-            v-bind:key="reward.id"
-            class="grid grid-cols-2 p-4 mb-4 border-2
-            border-blue-800 rounded-lg"
-        >
-            <h3 class="text-xl">{{ reward.name }}</h3>
-            <p class="text-red-500 text-4xl">{{ reward.point }}</p>
-            <RouterLink :to="`rewards/${reward.id}`">Deteail</RouterLink>
-            <button v-on:click="selectReward(reward)"
-                class="px-2 py-1 border rounded-xl"
-            >
-            Redeem
-            </button>
-            
 
-        </div>
+        <reward-card v-for="reward in rewards" 
+        :reward="reward"
+        :key="reward.id"
+        :url="`rewards/${reward.id}`"
+        >
+        </reward-card>
+        
 
         {{selected}}
 
@@ -29,8 +20,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-
+import RewardCard from '@/components/rewards/RewardCard.vue'
 export default {
     data() {
         return {
@@ -39,6 +29,9 @@ export default {
             rewards: null,
             error: null
         }
+    },
+    components:{
+        RewardCard
     },
     methods: {
         selectReward(reward){
@@ -51,7 +44,6 @@ export default {
     async mounted() {
         console.log("mounted")
         this.error = null
-        const url = "http://localhost/api/rewards"
         
         //Non-Blocking I/O ทำงานแบบไม่รอใคร ยังโหลดไม่เสร็จ ก็ทำแล้ว
         //Asynchronous Language
@@ -67,7 +59,7 @@ export default {
         //     this.selected = error.message
         // }
         try{
-            const response = await axios.get(url)
+            const response = await this.$axios.get("/rewards")
             if(response.status == 200){
                 this.rewards = response.data.data
             }else{

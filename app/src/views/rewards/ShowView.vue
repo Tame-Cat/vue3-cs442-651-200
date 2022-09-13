@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import Axios  from 'axios'
 export default {
     data() {
         return{
@@ -19,10 +18,10 @@ export default {
     },
     async created() {
         const id = this.$route.params.id
-        const url = `http://localhost/api/rewards/${id}`
+        // const url = `http://localhost/api/rewards/${id}` //แบบเก่า
 
         try {
-            const response = await Axios.get(url)
+            const response = await this.$axios.get(`/rewards/${id}`)
             if(response.status === 200) {
                 this.reward = response.data.data
                 console.table(this.reward)
