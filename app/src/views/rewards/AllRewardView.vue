@@ -11,6 +11,10 @@
         :key="reward.id"
         :url="`rewards/${reward.id}`"
         >
+            {{reward.detail}} 
+            <template #total_amount>
+                จำกัดจำนวน {{reward.total_amount}} สิทธิ์
+            </template>
         </reward-card>
         
 

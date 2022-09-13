@@ -1,5 +1,5 @@
 <template>
-    <div class="m-8">
+    <div class="m-8" v-if="reward">
         <h1 class="text-3xl"> {{reward.name}} </h1>
 
         <p>{{reward.detail}}</p>
