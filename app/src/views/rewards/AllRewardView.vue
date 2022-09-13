@@ -60,7 +60,7 @@ export default {
             try {
                 const response = await axios.delete(url)
                 if(response.status == 200) {
-                    console.table(response.status)
+                    console.table(response)
                     this.$router.push({
                         name: 'rewards'
                     })
