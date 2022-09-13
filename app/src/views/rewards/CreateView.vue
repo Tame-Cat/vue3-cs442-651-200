@@ -1,6 +1,7 @@
 <template>
     <div class="m-8">
         <h1 class="text-3xl">Create New Reward</h1>
+        
 
         <div>
             <div>

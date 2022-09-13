@@ -68,7 +68,7 @@ export default {
         // }
         try{
             const response = await axios.get(url)
-            if(response.status === 200){
+            if(response.status == 200){
                 this.rewards = response.data.data
             }else{
                 console.error(response.status)
