@@ -19,6 +19,12 @@
             >
             Redeem
             </button>
+
+            <button v-on:click="deleteReward(reward)"
+                class="px-2 py-1 border rounded-xl text-red-600"
+            >
+            Delete
+            </button>
             
 
         </div>
@@ -47,8 +53,23 @@ export default {
                 params: {id: reward.id}
             })
         },
-        deleteReward(reward){
-            
+        async deleteReward(reward){
+            const id = reward.id
+            const url = `http://localhost/api/rewards/${id}`
+
+            try {
+                const response = await axios.delete(url)
+                if(response.status == 200) {
+                    console.table(response.status)
+                    this.$router.push({
+                        name: 'rewards'
+                    })
+                }
+                
+            } catch (error) {
+                console.log(error)
+                this.error = error.message
+            }
         }
     },
     async mounted() {
