@@ -6,6 +6,30 @@
             {{ error }}
         </div>
 
+        <div>
+            <label>Sort by</label>
+            <select v-model="sortOption">
+                <option value="default">---</option>
+                <option value="name">name</option>
+                <option value="point">point</option>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-2 my-4">
+            <button @click="onClickSortByPoint"
+             class="px-2 py-1 mx-4 bg-orange-200 border rounded-xl"
+            >
+                sort by point
+            </button>
+
+            <button @click="onClickSortByName"
+            class="px-2 py-1 mx-4 bg-pink-200 border rounded-xl"
+            >
+                sort by name
+            </button>
+
+        </div>
+
         <reward-card v-for="reward in rewards" 
         :reward="reward"
         :key="reward.id"
@@ -25,13 +49,36 @@
 
 <script>
 import RewardCard from '@/components/rewards/RewardCard.vue'
+import { useRewardStore } from '@/stores/reward.js'
+
 export default {
+    setup() {
+        const reward_store = useRewardStore()
+        return { reward_store }
+    },
+
     data() {
         return {
             title: "Reward List",
             selected: null,
             rewards: null,
-            error: null
+            error: null,
+            sortOption: 'default'
+        }
+    },
+    watch: {
+        sortOption (newOption, oldOption) {
+            switch(newOption) {
+                case 'name':
+                    this.rewards = this.reward_store.sortByName
+                    break;
+                case 'point':
+                    this.rewards = this.reward_store.sortByPoint
+                    break;
+                default:
+                    this.rewards = this.reward_store.getRewards
+                    break;
+            }
         }
     },
     components:{
@@ -43,6 +90,14 @@ export default {
                 name: 'rewards.show',
                 params: {id: reward.id}
             })
+        },
+
+        onClickSortByPoint(){
+            this.rewards = this.reward_store.sortByPoint
+        },
+
+        onClickSortByName(){
+            this.rewards = this.reward_store.sortByName
         }
     },
     async mounted() {
@@ -63,12 +118,8 @@ export default {
         //     this.selected = error.message
         // }
         try{
-            const response = await this.$axios.get("/rewards")
-            if(response.status == 200){
-                this.rewards = response.data.data
-            }else{
-                console.error(response.status)
-            }
+            await this.reward_store.fetch()
+            this.rewards = this.reward_store.getRewards
         }catch(error) {
             this.error = error.message
         }

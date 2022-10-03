@@ -14,35 +14,41 @@
             <slot name="total_amount"></slot>
         </div>
 
-        <router-link v-if="url != ''" :to="url">Detail 1</router-link>
-
-        <span class="text-blue-700 my-style"
-            :class="url == '' ? '':'cursor-pointer'"
-            @click="onClickButton">
-            Detail 2
-        </span>
-    
         <button @click="onClickButton()"
-        class="px-2 py-1 border rounded-xl">
+        class="px-2 py-1 mx-4 border rounded-xl">
             Redeem
         </button>
 
-        <button @click="onClickLike()"
-        class="px-2 py-1 border rounded-xl"
-        :class="this.isLike == true ? 'bg-blue-600 text-white':''"
-        >
-          {{likeCount}} like
-        </button>
+        <div class="grid grid-cols-2">
+            <button @click="onClickLike()"
+            class="p-2 mx-8 bg-yellow-200 border-2 border-blue-400 rounded-xl"
+            >
+            {{ likeCount }} Likes
+            </button>
+
+            <button @click="onClickCounter()"
+            class="p-2 mx-8 bg-green-200 border-2 border-blue-400 rounded-xl">
+             {{ counter_store.counter }} |
+             {{ counter_store.doubleCount }}
+            </button>
+
+        </div>
         
     </div>
 </template>
 
 <script>
+import { useCounterStore } from '@/stores/counter.js'
+
 export default {
+    setup() {
+        const counter_store = useCounterStore()
+        return {counter_store}
+    },
     data() {
         return {
-            likeCount: 0,
-            isLike: false
+            likeCount: 0
+            // isLike: false
         }
     },
     props: {
@@ -59,13 +65,17 @@ export default {
             }
         },
         onClickLike() {
-            if(!this.isLike){
-                this.likeCount++
-                this.isLike = true
-            }else{
-                this.likeCount--
-                this.isLike = false
-            }
+            // if(!this.isLike){
+            //     this.likeCount++
+            //     this.isLike = true
+            // }else{
+            //     this.likeCount--
+            //     this.isLike = false
+            // }
+            this.likeCount++
+        },
+        onClickCounter() {
+            this.counter_store.increment()
         }
     }
 }
